@@ -15,73 +15,127 @@
         /* 全屏温柔背景 */
         body {
             min-height: 100vh;
-            /* 粉→浅蓝渐变背景，温柔不刺眼 */
             background: linear-gradient(135deg, #fef3f8 0%, #f0f7ff 100%);
             display: flex;
             justify-content: center;
             align-items: center;
             overflow: hidden;
-            /* 日语友好字体栈，确保显示正常 */
             font-family: "Noto Sans JP", "Hiragino Sans", "Yu Gothic UI", sans-serif;
+            position: relative;
         }
 
-        /* 樱花装饰（纯CSS绘制，无需图片） */
+        /* 🌟 新增：星光装饰（丰富背景） */
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: #fff;
+            border-radius: 50%;
+            box-shadow: 0 0 8px 2px rgba(255, 255, 255, 0.8);
+            opacity: 0;
+            animation: starTwinkle 3s ease-in-out infinite;
+        }
+
+        @keyframes starTwinkle {
+            0%, 100% { opacity: 0; }
+            50% { opacity: 1; }
+        }
+
+        /* 优化樱花样式：支持随机大小/轨迹 */
         .sakura {
             position: absolute;
-            width: 10px;
-            height: 10px;
             background: #ffb6c1;
             border-radius: 50% 0 50% 50%;
             opacity: 0.7;
-            animation: fall linear infinite;
+            /* 新增：左右摆动+旋转+下落的复合动画 */
+            animation: fallWithSwing linear infinite;
+            /* 初始位置在屏幕外上方 */
+            top: -10px;
         }
 
-        /* 樱花飘落动画 */
-        @keyframes fall {
+        /* 樱花飘落+左右摆动动画（更自然） */
+        @keyframes fallWithSwing {
             0% {
-                transform: translateY(-10vh) rotate(0deg);
+                transform: translateY(0) rotate(0deg) translateX(0);
                 opacity: 0;
             }
-            10% { opacity: 0.7; }
-            90% { opacity: 0.7; }
+            10% { 
+                opacity: 0.8; 
+            }
+            90% { 
+                opacity: 0.8; 
+            }
             100% {
-                transform: translateY(110vh) rotate(360deg);
+                transform: translateY(110vh) rotate(720deg) translateX(50px);
                 opacity: 0;
             }
         }
 
-        /* 给樱花加随机位置和延迟，更自然 */
-        .sakura:nth-child(1) { left: 10%; animation-duration: 10s; animation-delay: 0s; }
-        .sakura:nth-child(2) { left: 20%; animation-duration: 12s; animation-delay: 1s; }
-        .sakura:nth-child(3) { left: 30%; animation-duration: 8s; animation-delay: 2s; }
-        .sakura:nth-child(4) { left: 40%; animation-duration: 11s; animation-delay: 0.5s; }
-        .sakura:nth-child(5) { left: 50%; animation-duration: 9s; animation-delay: 1.5s; }
-        .sakura:nth-child(6) { left: 60%; animation-duration: 13s; animation-delay: 2.5s; }
-        .sakura:nth-child(7) { left: 70%; animation-duration: 10s; animation-delay: 3s; }
-        .sakura:nth-child(8) { left: 80%; animation-duration: 12s; animation-delay: 1s; }
-        .sakura:nth-child(9) { left: 90%; animation-duration: 8s; animation-delay: 2s; }
-        .sakura:nth-child(10) { left: 95%; animation-duration: 11s; animation-delay: 0.5s; }
+        /* 🌟 新增：进入按钮样式 */
+        .enter-btn-container {
+            z-index: 20;
+            animation: fadeIn 1s ease-out forwards;
+        }
 
-        /* 核心文字容器 */
+        .enter-btn {
+            padding: 1.2rem 3rem;
+            font-size: clamp(1.2rem, 4vw, 2rem);
+            font-weight: 600;
+            color: #fff;
+            background: linear-gradient(90deg, #ff6b9d, #ff9ff3);
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(255, 107, 157, 0.3);
+            transition: all 0.3s ease;
+            /* 轻微呼吸动画 */
+            animation: breathe 2s ease-in-out infinite;
+        }
+
+        .enter-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(255, 107, 157, 0.4);
+        }
+
+        .enter-btn:active {
+            transform: translateY(1px);
+        }
+
+        @keyframes breathe {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        /* 核心文字容器：默认隐藏，点击后显示 */
         .greeting {
             text-align: center;
             z-index: 10;
-            /* 淡入动画，更有仪式感 */
-            animation: fadeIn 1.5s ease-out forwards;
             opacity: 0;
+            transform: translateY(30px);
+            pointer-events: none;
         }
 
-        /* 淡入动画 */
+        /* 淡入+上浮动画（点击后触发） */
+        .greeting.show {
+            animation: fadeIn 1.5s ease-out forwards;
+        }
+
         @keyframes fadeIn {
-            to { opacity: 1; transform: translateY(0); }
-            from { opacity: 0; transform: translateY(30px); }
+            to { 
+                opacity: 1; 
+                transform: translateY(0); 
+                pointer-events: auto;
+            }
+            from { 
+                opacity: 0; 
+                transform: translateY(30px); 
+            }
         }
 
-        /* 🌟 核心：彩色渐变字体 */
+        /* 彩色渐变字体（保留原有效果） */
         .greeting-text {
-            font-size: clamp(2.5rem, 8vw, 5rem); /* 响应式字体，适配所有屏幕 */
+            font-size: clamp(2.5rem, 8vw, 5rem);
             font-weight: 700;
-            /* 柔和彩虹渐变（粉→橙→蓝→紫→绿） */
             background: linear-gradient(90deg, 
                 #ff6b9d,  /* 温柔粉 */
                 #feca57,  /* 暖橙黄 */
@@ -90,23 +144,25 @@
                 #1dd1a1   /* 清新绿 */
             );
             background-size: 200% 100%;
-            /* 关键：把渐变裁剪成文字形状 */
             -webkit-background-clip: text;
             background-clip: text;
-            color: transparent; /* 文字本身透明，只显示渐变背景 */
-            /* 文字阴影，增加立体感 */
+            color: transparent;
             text-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            /* 轻微浮动动画，灵动不夸张 */
-            animation: float 3s ease-in-out infinite;
+            /* 新增：渐变流动动画 */
+            animation: gradientFlow 8s ease-in-out infinite, float 3s ease-in-out infinite;
         }
 
-        /* 浮动动画 */
+        @keyframes gradientFlow {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
         @keyframes float {
             0%, 100% { transform: translateY(0); }
             50% { transform: translateY(-10px); }
         }
 
-        /* 温柔副标题（可选，不抢核心） */
+        /* 温柔副标题 */
         .sub-text {
             margin-top: 1.5rem;
             font-size: clamp(1rem, 3vw, 1.5rem);
@@ -115,25 +171,108 @@
             animation: fadeIn 1.5s ease-out 0.5s forwards;
             opacity: 0;
         }
+
+        /* 隐藏元素的辅助类 */
+        .hidden {
+            display: none;
+        }
     </style>
 </head>
 <body>
-    <!-- 樱花装饰 -->
-    <div class="sakura"></div>
-    <div class="sakura"></div>
-    <div class="sakura"></div>
-    <div class="sakura"></div>
-    <div class="sakura"></div>
-    <div class="sakura"></div>
-    <div class="sakura"></div>
-    <div class="sakura"></div>
-    <div class="sakura"></div>
-    <div class="sakura"></div>
+    <!-- 🌟 新增：进入按钮容器 -->
+    <div class="enter-btn-container" id="enterContainer">
+        <button class="enter-btn" id="enterBtn">お入りください ✨</button>
+    </div>
 
-    <!-- 核心内容 -->
-    <div class="greeting">
+    <!-- 核心内容：默认隐藏 -->
+    <div class="greeting" id="greeting">
         <h1 class="greeting-text">寛人様、お疲れ様でした！</h1>
         <p class="sub-text">今日もゆっくり休んでくださいね✨</p>
     </div>
+
+    <script>
+        // 🌟 动态生成樱花（数量更多、随机属性）
+        function createSakura() {
+            const sakuraCount = 30; // 樱花数量（比原来多）
+            const body = document.body;
+
+            for (let i = 0; i < sakuraCount; i++) {
+                const sakura = document.createElement('div');
+                sakura.className = 'sakura';
+                
+                // 随机大小（5-12px）
+                const size = Math.random() * 7 + 5;
+                sakura.style.width = `${size}px`;
+                sakura.style.height = `${size}px`;
+                
+                // 随机水平位置（0-100%）
+                sakura.style.left = `${Math.random() * 100}%`;
+                
+                // 随机飘落时长（6-15秒）
+                const duration = Math.random() * 9 + 6;
+                sakura.style.animationDuration = `${duration}s`;
+                
+                // 随机延迟（0-10秒）
+                const delay = Math.random() * 10;
+                sakura.style.animationDelay = `${delay}s`;
+                
+                // 随机透明度（0.6-0.9）
+                sakura.style.opacity = Math.random() * 0.3 + 0.6;
+                
+                body.appendChild(sakura);
+            }
+        }
+
+        // 🌟 动态生成星光装饰
+        function createStars() {
+            const starCount = 50;
+            const body = document.body;
+
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                
+                // 随机位置
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.top = `${Math.random() * 100}%`;
+                
+                // 随机闪烁时长
+                const duration = Math.random() * 3 + 2;
+                star.style.animationDuration = `${duration}s`;
+                
+                // 随机延迟
+                const delay = Math.random() * 5;
+                star.style.animationDelay = `${delay}s`;
+                
+                body.appendChild(star);
+            }
+        }
+
+        // 🌟 点击进入按钮的交互逻辑
+        function initEnterInteraction() {
+            const enterContainer = document.getElementById('enterContainer');
+            const enterBtn = document.getElementById('enterBtn');
+            const greeting = document.getElementById('greeting');
+
+            enterBtn.addEventListener('click', () => {
+                // 按钮淡出+隐藏
+                enterContainer.style.opacity = 0;
+                enterContainer.style.transition = 'opacity 0.8s ease-out';
+                
+                setTimeout(() => {
+                    enterContainer.classList.add('hidden');
+                    // 显示问候文字（触发淡入动画）
+                    greeting.classList.add('show');
+                }, 800);
+            });
+        }
+
+        // 初始化
+        window.onload = function() {
+            createSakura(); // 生成樱花
+            createStars();  // 生成星光
+            initEnterInteraction(); // 初始化点击交互
+        };
+    </script>
 </body>
 </html>
