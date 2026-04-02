@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>寛人様へ</title>
+    <style>
+        /* 全局重置 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* 全屏温柔背景 */
+        body {
+            min-height: 100vh;
+            /* 粉→浅蓝渐变背景，温柔不刺眼 */
+            background: linear-gradient(135deg, #fef3f8 0%, #f0f7ff 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            /* 日语友好字体栈，确保显示正常 */
+            font-family: "Noto Sans JP", "Hiragino Sans", "Yu Gothic UI", sans-serif;
+        }
+
+        /* 樱花装饰（纯CSS绘制，无需图片） */
+        .sakura {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #ffb6c1;
+            border-radius: 50% 0 50% 50%;
+            opacity: 0.7;
+            animation: fall linear infinite;
+        }
+
+        /* 樱花飘落动画 */
+        @keyframes fall {
+            0% {
+                transform: translateY(-10vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% { opacity: 0.7; }
+            90% { opacity: 0.7; }
+            100% {
+                transform: translateY(110vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* 给樱花加随机位置和延迟，更自然 */
+        .sakura:nth-child(1) { left: 10%; animation-duration: 10s; animation-delay: 0s; }
+        .sakura:nth-child(2) { left: 20%; animation-duration: 12s; animation-delay: 1s; }
+        .sakura:nth-child(3) { left: 30%; animation-duration: 8s; animation-delay: 2s; }
+        .sakura:nth-child(4) { left: 40%; animation-duration: 11s; animation-delay: 0.5s; }
+        .sakura:nth-child(5) { left: 50%; animation-duration: 9s; animation-delay: 1.5s; }
+        .sakura:nth-child(6) { left: 60%; animation-duration: 13s; animation-delay: 2.5s; }
+        .sakura:nth-child(7) { left: 70%; animation-duration: 10s; animation-delay: 3s; }
+        .sakura:nth-child(8) { left: 80%; animation-duration: 12s; animation-delay: 1s; }
+        .sakura:nth-child(9) { left: 90%; animation-duration: 8s; animation-delay: 2s; }
+        .sakura:nth-child(10) { left: 95%; animation-duration: 11s; animation-delay: 0.5s; }
+
+        /* 核心文字容器 */
+        .greeting {
+            text-align: center;
+            z-index: 10;
+            /* 淡入动画，更有仪式感 */
+            animation: fadeIn 1.5s ease-out forwards;
+            opacity: 0;
+        }
+
+        /* 淡入动画 */
+        @keyframes fadeIn {
+            to { opacity: 1; transform: translateY(0); }
+            from { opacity: 0; transform: translateY(30px); }
+        }
+
+        /* 🌟 核心：彩色渐变字体 */
+        .greeting-text {
+            font-size: clamp(2.5rem, 8vw, 5rem); /* 响应式字体，适配所有屏幕 */
+            font-weight: 700;
+            /* 柔和彩虹渐变（粉→橙→蓝→紫→绿） */
+            background: linear-gradient(90deg, 
+                #ff6b9d,  /* 温柔粉 */
+                #feca57,  /* 暖橙黄 */
+                #48dbfb,  /* 清浅蓝 */
+                #ff9ff3,  /* 梦幻紫 */
+                #1dd1a1   /* 清新绿 */
+            );
+            background-size: 200% 100%;
+            /* 关键：把渐变裁剪成文字形状 */
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent; /* 文字本身透明，只显示渐变背景 */
+            /* 文字阴影，增加立体感 */
+            text-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            /* 轻微浮动动画，灵动不夸张 */
+            animation: float 3s ease-in-out infinite;
+        }
+
+        /* 浮动动画 */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* 温柔副标题（可选，不抢核心） */
+        .sub-text {
+            margin-top: 1.5rem;
+            font-size: clamp(1rem, 3vw, 1.5rem);
+            color: #666;
+            opacity: 0.8;
+            animation: fadeIn 1.5s ease-out 0.5s forwards;
+            opacity: 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- 樱花装饰 -->
+    <div class="sakura"></div>
+    <div class="sakura"></div>
+    <div class="sakura"></div>
+    <div class="sakura"></div>
+    <div class="sakura"></div>
+    <div class="sakura"></div>
+    <div class="sakura"></div>
+    <div class="sakura"></div>
+    <div class="sakura"></div>
+    <div class="sakura"></div>
+
+    <!-- 核心内容 -->
+    <div class="greeting">
+        <h1 class="greeting-text">寛人様、お疲れ様でした！</h1>
+        <p class="sub-text">今日もゆっくり休んでくださいね✨</p>
+    </div>
+</body>
+</html>
