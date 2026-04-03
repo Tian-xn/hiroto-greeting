@@ -11,17 +11,34 @@
             box-sizing: border-box;
         }
 
-        body {
-            min-height: 100vh;
-            background: linear-gradient(135deg, #fef3f8 0%, #f0f7ff 100%);
-            display: flex;
-            justify-content: center;
-            align-items: center;
+        /* 全屏滚动容器：3页内容 */
+        .container {
+            width: 100vw;
+            height: 100vh;
             overflow: hidden;
-            font-family: "Noto Sans JP", "Hiragino Sans", "Yu Gothic UI", sans-serif;
-            position: relative;
+            scroll-snap-type: y mandatory;
         }
 
+        /* 通用全屏页面样式 */
+        .page {
+            width: 100%;
+            height: 100vh;
+            scroll-snap-align: start;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #fef3f8 0%, #f0f7ff 100%);
+            font-family: "Noto Sans JP", "Hiragino Sans", "Yu Gothic UI", sans-serif;
+            padding: 2rem;
+        }
+
+        body {
+            overflow: hidden;
+        }
+
+        /* 星光装饰 */
         .star {
             position: absolute;
             width: 2px;
@@ -31,6 +48,7 @@
             box-shadow: 0 0 8px 2px rgba(255, 255, 255, 0.8);
             opacity: 0;
             animation: starTwinkle 3s ease-in-out infinite;
+            z-index: 1;
         }
 
         @keyframes starTwinkle {
@@ -38,6 +56,7 @@
             50% { opacity: 1; }
         }
 
+        /* 樱花飘落 */
         .sakura {
             position: absolute;
             background: #ffb6c1;
@@ -45,6 +64,7 @@
             opacity: 0.7;
             animation: fallWithSwing linear infinite;
             top: -10px;
+            z-index: 1;
         }
 
         @keyframes fallWithSwing {
@@ -54,63 +74,25 @@
             100% { transform: translateY(110vh) rotate(720deg) translateX(50px); opacity: 0; }
         }
 
-        .enter-btn-container {
-            z-index: 20;
+        /* 柔光斑纹（柔光效果） */
+        .light-spot {
             position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            background: rgba(255, 255, 250, 0.3);
+            box-shadow: 0 0 20px 10px rgba(255, 182, 193, 0.2);
+            opacity: 0.6;
+            animation: lightFloat 20s ease-in-out infinite;
+            z-index: 0;
+        }
+        @keyframes lightFloat {
+            0% { transform: translate(0, 0) scale(1); opacity: 0.4; }
+            50% { transform: translate(50px, -30px) scale(1.2); opacity: 0.7; }
+            100% { transform: translate(0, 0) scale(1); opacity: 0.4; }
         }
 
-        .enter-btn {
-            padding: 1.2rem 3rem;
-            font-size: clamp(1.2rem, 4vw, 2rem);
-            font-weight: 600;
-            color: #fff;
-            background: linear-gradient(90deg, #ff6b9d, #ff9ff3);
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            box-shadow: 0 8px 20px rgba(255, 107, 157, 0.3);
-            transition: all 0.3s ease;
-            animation: fadeIn 1s ease-out forwards, breathe 2s ease-in-out infinite;
-        }
-
-        .enter-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 25px rgba(255, 107, 157, 0.4);
-        }
-
-        .enter-btn:active {
-            transform: translateY(1px);
-        }
-
-        @keyframes breathe {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-
-        .greeting {
-            text-align: center;
-            z-index: 10;
-            opacity: 0;
-            transform: translateY(30px);
-            pointer-events: none;
-            width: 90%;
-            max-width: 800px;
-        }
-
-        .greeting.show {
-            animation: fadeIn 1.5s ease-out forwards;
-        }
-
-        @keyframes fadeIn {
-            to { opacity: 1; transform: translateY(0); pointer-events: auto; }
-            from { opacity: 0; transform: translateY(30px); }
-        }
-
-        .greeting-text {
-            font-size: clamp(2.5rem, 8vw, 5rem);
+        /* 全局渐变文字样式（统一风格） */
+        .gradient-text {
+            font-size: clamp(3rem, 10vw, 6rem);
             font-weight: 700;
             background: linear-gradient(90deg, #ff6b9d, #feca57, #48dbfb, #ff9ff3, #1dd1a1);
             background-size: 200% 100%;
@@ -119,6 +101,34 @@
             color: transparent;
             text-shadow: 0 4px 15px rgba(0,0,0,0.1);
             animation: gradientFlow 8s ease-in-out infinite, float 3s ease-in-out infinite;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        /* 全局按钮样式（统一风格） */
+        .nav-btn {
+            padding: 1rem 2.5rem;
+            background: linear-gradient(90deg, #ff6b9d, #ff9ff3);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-size: clamp(1rem, 3vw, 1.2rem);
+            cursor: pointer;
+            transition: 0.3s;
+            animation: fadeIn 1.5s ease-out forwards;
+            margin-top: 1rem;
+            z-index: 30;
+            position: relative;
+        }
+
+        .nav-btn:hover {
+            transform: scale(1.05);
+        }
+
+        /* 动画通用 */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         @keyframes gradientFlow {
@@ -131,23 +141,76 @@
             50% { transform: translateY(-10px); }
         }
 
+        /* -------------------- 第二页：温かいお話 -------------------- */
+        .story-content {
+            width: 90%;
+            max-width: 700px;
+            text-align: center;
+            z-index: 10;
+            /* 🔥 优化：顶部内边距，整体下移内容，彻底避免标题溢出 */
+            padding-top: 1rem;
+        }
+
+        /* 🔥 优化：缩小标题字体，降低高度，解决跨页问题 */
+        .story-title {
+            font-size: clamp(1.4rem, 4vw, 2.2rem);
+            font-weight: 700;
+            background: linear-gradient(90deg, #ff6b9d, #ff9ff3);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 1.2rem;
+        }
+
+        /* 🔥 优化：进一步微缩故事字体，更紧凑，完全适配页面 */
+        .story-text {
+            font-size: clamp(0.85rem, 2.3vw, 1rem);
+            color: #555;
+            line-height: 1.8;
+            text-align: left;
+            white-space: pre-line;
+            opacity: 0.95;
+            border: 2px solid #ffb6c1;
+            border-radius: 20px;
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.7);
+            margin-bottom: 80px;
+        }
+
+        /* 第二页继续按钮固定底部 */
+        .page2 .nav-btn {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        /* -------------------- 第三页：留言页面 -------------------- */
+        .page3 {
+            gap: 1rem;
+        }
+
+        .page3 .gradient-text {
+            font-size: clamp(2.5rem, 8vw, 5rem);
+        }
+
         .sub-text {
-            margin-top: 1.5rem;
             font-size: clamp(1rem, 3vw, 1.5rem);
             color: #666;
             opacity: 0.8;
             animation: fadeIn 1.5s ease-out 0.5s forwards;
-            opacity: 0;
+            margin-bottom: 2rem;
+            text-align: center;
         }
 
-        /* 🌟 新增：留言表单样式 */
+        /* 留言表单 */
         .message-form {
-            margin-top: 2rem;
+            width: 90%;
+            max-width: 600px;
             display: flex;
             flex-direction: column;
             gap: 1rem;
             animation: fadeIn 1.5s ease-out 1s forwards;
-            opacity: 0;
         }
 
         .message-input {
@@ -161,38 +224,51 @@
             font-family: inherit;
         }
 
-        .submit-btn {
-            padding: 1rem;
-            background: linear-gradient(90deg, #ff6b9d, #ff9ff3);
-            color: white;
-            border: none;
-            border-radius: 15px;
-            font-size: 1.1rem;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        .submit-btn:hover {
-            transform: scale(1.03);
-        }
-
         .hidden { display: none; }
     </style>
 </head>
 <body>
-    <div class="enter-btn-container" id="enterContainer">
-        <button class="enter-btn" id="enterBtn">🌟おかえり🌟</button>
-    </div>
+    <div class="container" id="container">
+        <!-- 🌟 第一页：おかえり 欢迎页 -->
+        <section class="page page1">
+            <h1 class="gradient-text">🌟おかえり🌟</h1>
+            <button class="nav-btn" id="toPage2">📖 暖かいお話を読もう</button>
+        </section>
 
-    <div class="greeting" id="greeting">
-        <h1 class="greeting-text">寛人様、今日はどうお過ごしでしたか？</h1>
-        <p class="sub-text">もしお時間があれば、どうかどうか=~=</p>
+        <!-- 🌟 第二页：温馨日语小故事（标题完全在本页） -->
+        <section class="page page2">
+            <div class="story-content">
+                <h2 class="story-title">小さな桜とリス</h2>
+                <p class="story-text">春の日、小さな桜の木が咲きました。
+一匹の小さなリスが、桜の下で休んでいます。
 
-        <!-- 🌟 核心：留言表单（替换成你的邮箱） -->
-        <form class="message-form" action="https://formspree.io/f/mreoygod" method="POST">
-            <textarea class="message-input" name="message" placeholder="メッセージを入力してね" required></textarea>
-            <button class="submit-btn" type="submit">送信 🎀</button>
-        </form>
+「桜さん、あなたの花はとても優しい色ですね」
+リスがそっと囁きました。
+
+桜は風に揺れて、花びらを落としました。
+それはまるで、リスに笑いかけているようでした。
+
+毎日、リスは桜の下に来て、お話をします。
+寂しい時も、嬉しい時も。
+
+桜はいつも静かに、リスのそばにいてくれました。
+
+どんな小さな出会いも、心を温めてくれる。
+そんな、優しい春の物語です。</p>
+            </div>
+            <button class="nav-btn" id="toPage3">▶ 続ける</button>
+        </section>
+
+        <!-- 🌟 第三页：问候 + 留言表单 -->
+        <section class="page page3">
+            <h1 class="gradient-text">寛人様、今日はどうお過ごしでしたか？</h1>
+            <p class="sub-text">メッセージが欲しい！お時間があれば、どうかどうか=~=</p>
+            
+            <form class="message-form" action="https://formspree.io/f/mreoygod" method="POST">
+                <textarea class="message-input" name="message" placeholder="メッセージを入力してね" required></textarea>
+                <button class="nav-btn" type="submit">送信 🎀</button>
+            </form>
+        </section>
     </div>
 
     <script>
@@ -220,18 +296,36 @@
             }
         }
 
-        // 点击进入
-        document.getElementById('enterBtn').addEventListener('click',()=>{
-            const enter = document.getElementById('enterContainer');
-            enter.style.opacity = 0;
-            enter.style.transition = '0.8s';
-            setTimeout(()=>{
-                enter.classList.add('hidden');
-                document.getElementById('greeting').classList.add('show');
-            },800);
+        // 生成柔光斑纹
+        function createLightSpots() {
+            for(let i=0;i<8;i++){
+                const l = document.createElement('div');
+                l.className = 'light-spot';
+                const size = Math.random()*150+100+'px';
+                l.style.width = size;
+                l.style.height = size;
+                l.style.left = Math.random()*100+'%';
+                l.style.top = Math.random()*100+'%';
+                l.style.animationDuration = Math.random()*15+20+'s';
+                document.body.appendChild(l);
+            }
+        }
+
+        // 页面切换逻辑
+        const container = document.getElementById('container');
+        document.getElementById('toPage2').addEventListener('click', () => {
+            container.scrollTo({ top: window.innerHeight, behavior: 'smooth' });
+        });
+        document.getElementById('toPage3').addEventListener('click', () => {
+            container.scrollTo({ top: window.innerHeight * 2, behavior: 'smooth' });
         });
 
-        window.onload = ()=>{ createSakura(); createStars(); }
+        // 初始化
+        window.onload = ()=>{ 
+            createSakura(); 
+            createStars(); 
+            createLightSpots();
+        }
     </script>
 </body>
 </html>
